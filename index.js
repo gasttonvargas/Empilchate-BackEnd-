@@ -1,19 +1,38 @@
 const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors'); // Importar el paquete cors
 const connectDB = require('./dbconfig');
-require('dotenv').config(); // Asegúrate de que esta línea esté aquí también
+const productRoutes = require('./routes/productRoute');
+const userRoutes = require('./routes/userRoute');
+const categoryRoutes = require('./routes/categoryRoute');
+const orderRoutes = require('./routes/orderRoute');
 
+// Configurar dotenv para usar variables de entorno
+dotenv.config();
+
+// Crear la aplicación Express
 const app = express();
 
-// Conectar a MongoDB
-connectDB();
+// Configuración de CORS
+app.use(cors({
+  origin: 'http://localhost:5173', 
+}));
 
-// Middleware
+// Middleware para parsear JSON
 app.use(express.json());
 
-// Configurar rutas aquí
-// app.use('/api/users', require('./routes/userRoutes'));
-// app.use('/api/products', require('./routes/productRoutes'));
+// Conectar a la base de datos
+connectDB();
 
-// Iniciar el servidor
+// Definir las rutas
+app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/orders', orderRoutes);
+
+// Configurar el puerto y escuchar
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
