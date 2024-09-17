@@ -24,20 +24,16 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Actualizar un producto existente
-router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const { name, price, image, category } = req.body;
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(id, { name, price, image, category }, { new: true });
-    if (!updatedProduct) {
-      return res.status(404).json({ message: 'Producto no encontrado' });
+// Actualizar el estado de publicación de un producto
+router.patch('/products/:id', async (req, res) => {
+    try {
+      const product = await Product.findByIdAndUpdate(req.params.id, { isPublished: req.body.isPublished }, { new: true });
+      if (!product) return res.status(404).json({ message: 'Producto no encontrado' });
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-    res.json(updatedProduct);
-  } catch (error) {
-    res.status(400).json({ message: 'Error al actualizar el producto' });
-  }
-});
+  });
 
 // Eliminar un producto
 router.delete('/:id', async (req, res) => {

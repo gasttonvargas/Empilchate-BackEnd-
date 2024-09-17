@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const cors = require('cors'); // Importar el paquete cors
+const cors = require('cors');
 const connectDB = require('./dbconfig');
 const productRoutes = require('./routes/productRoute');
 const userRoutes = require('./routes/userRoute');
